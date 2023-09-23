@@ -1,0 +1,31 @@
+<!--takes extends "blog/base.html for TITLE code"-->
+<!--TITLE is displayed in tab of browser-->
+<head>
+    <title>Register</title>
+</head>
+{% extends "blog/base.html" %}
+<!--Loding crispy bootstrap pack to beautify the page-->
+<!--Refer Cmd_codes file in C:\Users\DELL\Desktop\Python codes\Django_Web_App
+for more info of download & installtion of this package-->
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="content-section">
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Join Today</legend>
+                {{ form|crispy }}
+                <!--'|' represents filter. filter crispy is applied to the form -->
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit">Sign Up</button>
+            </div>
+        </form>
+        <div class="border-top pt-3">
+            <small class="text-muted">
+                <!--Takes to login page (users/login.html)if acc already exists-->
+                Already Have An Account? <a class="ml-2" href="{% url 'login'%}">Sign In</a>
+            </small>
+        </div>
+    </div>
+{% endblock content %}

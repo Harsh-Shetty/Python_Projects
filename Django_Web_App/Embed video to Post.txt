@@ -1,0 +1,31 @@
+pip install django django-embed-video
+
+In settings.py under INSTALLED_APPS add 'embed_video',
+
+In blog\models.py:- from  embed_video.fields  import  EmbedVideoField & add video = EmbedVideoField(null=True,blank=True) in class Post
+
+Then run the following commands respectively to make migrations and migrate our model:
+python manage.py makemigrations
+python manage.py migrate
+
+In blog\admin.py:- Import AdminVideoMixin. Create a class and register the created class like the following:
+from  embed_video.admin  import  AdminVideoMixin.
+class  EmbedVideoAdmin(AdminVideoMixin, admin.ModelAdmin):
+	pass
+admin.site.register(Post, EmbedideoAdmin)
+
+In blog\views.py:- add 'video' to the  fileds variable of classes PostCreateView & PostUpdateView respectively like the following:
+fields = ['title', 'content', 'video']
+
+In blog\templates\blog\post_detail.html add the iframe after object.content section
+eg:
+         <p class="article-content">{{ object.content }}</p>
+         <--Add this for showing video in post_deatil.html only if the Post  has video.-->
+        {% if object.video %}
+            <iframe width="560" height="360"
+                src="{{ object.video }}"title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; 
+                encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+            </iframe>
+        {% endif %}
+
+Link to pic of method: https://i.postimg.cc/bJCc7H93/django-adding-embed-video-to-post.jpg

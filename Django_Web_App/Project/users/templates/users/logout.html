@@ -1,0 +1,12 @@
+<!--takes extends "blog/base.html for TITLE code"-->
+<!--TITLE is displayed in tab of browser-->
+{% extends "blog/base.html" %}
+{% block content %}
+        <h2>You have been logged out</h2>
+        <div class="border-bottom pt-3">
+            <small style= "font-size:30px">
+                <!--Takes to login page (users/login.html)-->
+                <a href="{% url 'login'%}">Log in Again</a>
+            </small>
+        </div>
+{% endblock content %}

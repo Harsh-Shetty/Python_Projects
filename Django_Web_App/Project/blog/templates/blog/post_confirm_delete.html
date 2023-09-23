@@ -1,0 +1,31 @@
+<!--Copied & modified from templtes/blog/post_form.html-->
+<!--Removed crispy. h2 added in line 18.
+    Legend & submit changed in line 18 and line 23 resp. Button (line 24) changed to
+    btn-outline-danger class to highlight DELETION as WARNING in RED. Anchor class with
+    btn-outline-secondary added to take us back to Post-Detail page on Cancel option.
+    Redirect url for successful Deletion is present in blog/views.py in PostDeleteView class-->
+<head>
+    <title>Delete Post</title>
+</head>
+<!--takes extends "blog/base.html for TITLE code"-->
+<!--TITLE is displayed in tab of browser-->
+{% extends "blog/base.html" %}
+<!--Loding crispy bootstrap pack to beautify the page-->
+<!--Refer Cmd_codes file in C:\Users\DELL\Desktop\Python codes\Django_Web_App
+for more info of download & installtion of this package-->
+{% block content %}
+    <div class="content-section">
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Delete Post</legend>
+                <h2>Are you sure you want to DELETE this post "{{ object.title }}"</h2>
+                <!--'|' represents filter. filter crispy is applied to the form -->
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-danger" type="submit">Yes, DELETE</button>
+                <a class="btn btn-outline-secondary" href="{% url 'post-detail' object.id %}">Cancel</a>
+            </div>
+        </form>
+    </div>
+{% endblock content %}

@@ -1,0 +1,35 @@
+Example
+numberOfPorts = 3
+transmissionTime = 2
+packetlds = [4, 7, 10, 6]
+
+The destination ports, assuming no time conflicts
+are all calculated as packetlds[i] modulo
+numberOfPorts, so [7, 1, 1, OJin this case. These
+arrive at times 7, 2 3, 4. The first packet is sent to
+port 7 with no conflicts. Port 7 will be occupied at
+times 7 and 2 due to the transmission time, so the
+second packet has a conflict and is sent to port 7 +
+7 = 2. The third packet wants to go to port 7 and
+arrives at time 3. Since port 7 is no longer
+transmitting packet 7, it receives the third packet.
+The fourth packet goes to port Owithout conflicts.
+The return array is [7, 2, 7, O].
+
+Function Description
+Complete the sentTimesfunction in the editor
+below.
+
+sentTimes has the following parameter(s):
+
+int numberOfPorts: the number of ports in the
+system
+
+int transmissionTime: the time for a port to send
+a packet
+
+int packetlds[nj: the |Ds of the packets in the
+order in which they arrive
+
+Returns:
+int[n]: the ports to which the packets are sent

@@ -1,0 +1,123 @@
+<!--Parent template for TITLE which can be seen in Tab of browser-->
+
+<!--Child templates will overide 'blocks' (block content) -->
+
+{% load static %} <!--Loads static dir-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'blog/main.css' %}">
+
+    <!--If no custom title like in def about in views.py the let it be 'Django Blog'-->
+    {% if title %}
+        <title>{{ title }}</title>
+    {% else %}
+        <title>Django Blog</title>
+    {% endif %}
+
+</head>
+<body>
+    <!--This is MODAL (lg for large) which shows the message in the center of the screen (modal-dialog-centered) The message being the user Profile Pic
+        Check line 59. Fade is animation. This section of code is up here because it won't work otherwise.-->
+    <div class="modal fade bd-example-modal-lg" id="ViewProfilePic" tabindex="-1" role="dialog" aria-labelledby="ViewProfilePicTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="ViewProfilePicLongTitle">Your Profile Picture</h5>
+            <!--"X" on top right to close-->
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <!--user Profile Picture to be shown in MODAL message when we click on our PROFILE PICTURE in the NAVBAR above-->
+            <img src="{{ user.profile.image.url }}" style="height:500px;max-width: 100%; display:block; margin-left: auto; margin-right: auto">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <header class="site-header">
+        <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+        <div class="container">
+            <a class="navbar-brand mr-4" href="{% url 'blog-home' %}">Django Blog</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarToggle">
+            <div class="navbar-nav mr-auto">
+                <a class="nav-item nav-link" href="{% url 'blog-home' %}">Home</a>
+                <a class="nav-item nav-link" href="{% url 'blog-about' %}">About</a>
+            </div>
+            <!-- Navbar Right Side -->
+            <div class="navbar-nav">
+              {% if user.is_authenticated %} <!--i.e User is logged in-->
+              <a class="nav-item nav-link" href="{% url 'post-create' %}">New Post</a>
+              <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
+              <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
+              <input type="image" class="rounded-circle article-img" src="{{ user.profile.image.url }}" data-toggle="modal" data-target="#ViewProfilePic">
+              <!--This puts the Profile Pic in the nav bar & the input method acts as a trigger for MODAL. Check line 25-->
+              {% else%}
+                <!--i.e show login and register only if user isn't logged in-->
+                <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
+                <!--takes to users/template/users/login.html and register.html resp-->
+                <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
+              {% endif %}
+            </div>
+            </div>
+        </div>
+        </nav>
+    </header>
+
+    <main role="main" class="container my-md-5">
+        <div class="row">
+          <div class="col-md-8">
+            <!--For Flash messages from users/views.py-->
+            {% if messages %}
+              {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                <!--eg for message.tags: if success msg its alert-success-->
+                  {{ message }} <!--Prints msg. If success it prints SUCCESS statement i.e messages.success(request, f'Account created for {username}!') from users/view.py in def reigster--> 
+                </div>
+              {% endfor%}
+            {% endif%}
+            {% block content %}{% endblock %}
+          </div>
+          <div class="col-md-4">
+            <div class="content-section">
+              <h3>Our Sidebar</h3>
+              <p class='text-muted'>You can put any information here you'd like.
+                <ul class="list-group">
+                  <li class="list-group-item list-group-item-light">Latest Posts</li>
+                  <li class="list-group-item list-group-item-light">Announcements</li>
+                  <li class="list-group-item list-group-item-light">Calendars</li>
+                  <li class="list-group-item list-group-item-light">etc</li>
+                </ul>
+              </p>
+            </div>
+          </div>
+        </div>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <!--Script for READ MORE & READ LESS buttons for long text-->
+    <script> //Refer line 20 in templates/blog/home.html
+      $(document).ready(function() {
+    $(".show-hide-btn").click(function() {
+      var id = $(this).data("id");
+      $("#half-" + id).toggle();
+      $("#full-" + id).toggle();
+    })
+  })
+  </script>
+ </script>
+</body>
+</html>

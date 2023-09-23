@@ -1,0 +1,62 @@
+<!--Check blog/base.html in Templates dir for the fromat-->
+{% extends "blog/base.html" %}
+<!--posts is the key of context. Refer def home in blog/views.py-->
+{% block content %}
+    {% for post in posts %}
+        <article class="media content-section">
+            <!--img class adds user's profile pic beside the blog-->
+            <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
+            <div class="media-body">
+            <div class="article-metadata">
+                <!--href from blog/user_posts.html. Entire code is almost same as home-->
+                <a class="mr-2" href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>
+                <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+                <!--Documentation for date format (|date:"F d, Y"): https://docs.djangoproject.com/en/2.0/ref/templates/builtins/#date-->
+            </div>
+            <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
+            <!--urlize makes urls clickable-->
+            <!--Creating Read more & READ LESS buttons for large body-->
+            {% with text=post.content|urlize %}
+                {% if text|wordcount > 51 %}
+                <p class="article-content" id="half-{{ post.pk }}">{{text|truncatewords:50}}<a data-id="{{ post.pk }}" href="javascript:void();" class="show-hide-btn"><br><br>Read more</a></p>
+                <p class="article-content" id="full-{{post.pk }}" style="display: none;">{{ text }}<a data-id="{{ post.pk}}" href="javascript:void();" class="show-hide-btn"><br><br>Read less</a></p>
+                {% else %}
+                <p>
+                    {{ text }}
+                </p>
+                {% endif %}
+            {% endwith %}
+            </div>
+        </article>
+    {% endfor %}
+    <!--Number of pages per page (Pagination) toolbar eg: First,Previous,4,5,6,7,8,9,10,Next,Last-->
+    {% if is_paginated %}
+    <!--If page is paginated and page object has previous page object-->
+    {% if page_obj.has_previous %}
+        <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+    {% endif %}
+    <!--Loop for numbers of pages in range of paginated pages-->
+    {% for num in page_obj.paginator.page_range %}
+        <!--If page ojbect number is number of current page i.e The PAGE we are present in-->
+        {% if page_obj.number == num %}
+            <!--Button for current PAGE in the PAGINATE TOOLBAR-->
+            <!--Current Page loooks bigger becoz outline is removed from class-->
+            <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+            <!--If current page (num) has 3 previous pages then Print them out-->
+            <!--Same for next 3 pages-->
+            <!--Subtract not present-->
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+        {% endif %}
+    {% endfor %}
+
+    <!--If page has next page-->
+    {% if page_obj.has_next %}
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+        <!--page_obj.paginator.num_pages: Its val will be whatever number of pages we have-->
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+    {% endif %}
+
+    {% endif %}
+{% endblock content %}

@@ -1,0 +1,45 @@
+<!--takes extends "blog/base.html for TITLE code"-->
+<!--TITLE is displayed in tab of browser-->
+<head>
+    <title>Profile Page</title>
+</head>
+{% extends "blog/base.html" %}
+<!--Loding crispy bootstrap pack to beautify the page-->
+<!--Refer Cmd_codes file in C:\Users\DELL\Desktop\Python codes\Django_Web_App
+for more info of download & installtion of this package-->
+{% load crispy_forms_tags %}
+{% block content %}
+    <!--No longer used. It was just placeholder
+        <h1>{{user.username}}</h1>
+    user is built-in Django function. It refers to logged in user. 
+    Username is fetched from cleaned_data dict in users/views.py-->
+
+    <!--Add url_pattern for profile (localhost:8000/profile/)in Projects/url.py-->
+    <div class="content-section">
+        <div class="media">
+            <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
+            <!--to understand this  user.profile.image.url refer Django_Web_App\cmd for profile-->
+            <!--To make this work we still need media routes to url_patterns. Refer line 37 Project/urls.py-->
+            <div class="media-body">
+                <h2 class="account-heading">{{ user.username }}</h2>
+                <p class="text-secondary">{{ user.email }}</p>
+            </div>
+        </div>
+        <!--2 forms below for Username & E-mail (u_form) & Profile Pic (p_form) updates-->
+        <!--code for this in users/forms.py & users/views.py-->
+        <!--HTML code below for the forms is similar to register form in register.html-->
+        <form method="POST" enctype="multipart/form-data">
+         <!--enctype is necessary for processing & saving the uploaded image for Profile Pic-->
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Profile Info</legend>
+                {{ u_form|crispy }}
+                {{ p_form|crispy }}
+                <!--'|' represents filter. filter crispy is applied to the form -->
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit">Update</button>
+            </div>
+        </form>
+    </div>
+{% endblock content %}

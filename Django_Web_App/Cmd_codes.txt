@@ -1,0 +1,37 @@
+Ref YOUTUBE video: https://youtu.be/aHC3uTkT9r8
+
+python:
+
+pip commands:
+pip install django-crispy-forms. This is a bootstrap HTML template to beautify our Registration/Sign Up Web page. Add this
+		                in C:\Users\DELL\Desktop\Python codes\Django_Web_App\Project\Project\settings.py in the LIST of 
+                                                   INSTALLED APPS as 'crispy_forms', (Don't 4get the comma at the end as this is an LIST. Also,
+                                                   add CRISPY_TEMPLATE_PACK = 'bootstrap4' at the end of the same file.
+		                
+python manage.py runserver : Starts the server. localhost:8000 in browser to look at it
+python manage.py startapp "app name": Starts new app. eg: python manage.py startapp users or python manage.py startapp blog.
+Type this in the dir where u want to create the app (where manage.py resides).
+Like in C:\Users\DELL\Desktop\Python codes\Django_Web_App\Project. users and blog files will be created in here (Django_Web_App\Project).
+python manage.py makemigrations : Saves and checks the health of migrations & initialises the model
+python manage.py migrate : Creates changes to the database. This loads the model (refer bolg/models.py) in the Database. Run this after models.py in blog dir is created.
+python manage.py shell : Opens Pyhton interactive cmd line for manage.py
+
+(refer bolg/models.py)
+Commands for interactive cmd line for manage.py:
+post_1 = Post(title='Blog 1', content= 'xxx', author= user)  : Post creation
+post_1.save() : Saves the post. Necessary to save posr.
+
+
+User.objects.all() : Gives all users.
+User.objects.first(): Gives the first user
+Similarly for posts, eg:
+Post.objects.all() : Gives all Posts.
+
+user = User.objects.filter(username='Arthur').first() : Grab user. filter gives all fileds with the given val. 'first()' give the first result
+user.get_id: Gives user ID
+user.get_pk: Gives user primary key
+
+post_2 = Post(title='Blog 2', content= 'xxx', author_id= user_id) : Post creation with user ID
+user.post_set.create(title='Blog 3', content= 'xxx') : No need for author field for 3rd post as user was already set previously.
+exit() : To terminate
+

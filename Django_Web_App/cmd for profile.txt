@@ -1,0 +1,61 @@
+Ref YOUTUBE vid: https://youtu.be/FdVuKt_iuSI (Python Django Tutorial: Full-Featured Web App Part 8 - User Profile and Picture)
+
+1) pip install Pillow                                  -----> models.ImageField in Project/users/models.py require this python package
+
+2) python manage.py makemigrations      -----> Saves and checks the health of migrations & initialises the model (here Profile)
+
+3) python manage.py migrate                   -----> Creates changes to the database. This loads the model in the Database.
+
+4) Goto Project/users/admin.py and add ([from .models import Profile] [admin.site.register(Profile)])
+    This is to register the model. This adds Profile to the admin page of the Web app.
+
+5) python manage.py runserver               -----> Check if Profile was sucessfully. Open browser localhost:8000/admin.
+				    Username: Arthur; Pass: testing321 (if login required). Can cr8 profile with 'Add Profile' btn. Cr8 
+                                                                         profile 4 Arthur & upload a image . Cr8 profile for TestUser & don't give a profile pic
+
+
+6) python manage.py shell                                               -----> Opens Pyhton interactive cmd line for manage.py
+>>> from django.contrib.auth.models import User          -----> User model imported. Refer Project/users/models.py
+>>>user = User.objects.filter(username='Arthur').first()  -----> Grab user. filter gives all fileds with the given val. 'first()' give the first result
+>>>user                                                                          -----> To check if user is correct
+<User: Arthur>
+>>>user.profile
+<Profile: Arthur Profile>                                                                                           -----> We get profile obj in O/P
+>>>user.profile.image
+<ImageFieldFile: profile_pics/AC_4.jpg>                                                                  -----> We get models.ImageField obj
+(NOTE: we can try cmd like user.profile.image.width or user.profile.image.height)
+>>>user.profile.image.url                                                                                          -----> for image location
+'/profile_pics/AC_4.jpg'
+(NOTE: Images with same name don't override each other. Django gives hash val to each image. Now let's check the TestUser)
+>>> user = User.objects.filter(username='TestUser').first()
+>>> user
+<User: TestUser>
+>>> user.profile.image
+<ImageFieldFile: default.jpg>                                                                                   -----> We get default profile pic as expected. It was coded in                                                                                                                                                   Project/users/models.py
+>>>exit()                                                                                                                  -----> To exit the python shell
+
+NOTE: There is no default pic added yet. Just the name exists. Project/users/models.py aslo creates a profile_pics dir in Django_Web_App\Project.
+profile_pics/AC_4.jpg can be found there.
+We don't want profile_pics dir to clutter up the root dir
+To clean up/organise the dir we add MEDIA_ROOT = os.path.join(BASE_DIR, 'media') & MEDIA_URL = '/media/' to the last part of 
+Django_Web_App\Project\Project\settings.py file. Check the comments there for code explanation. Also, import os in settings.py
+
+7) Delete the Profiles created, through the browser after this as the dir changes made won't be applied to previously created profiles.
+
+8) Cr8 profiles again as previously done
+
+9) New dir created in Django_Web_App\Project\media\profile_pics. Delete old profile_pics dir.
+
+Continue with the vid 19:00 mins
+
+To delete old pics once new pics were uploaded:
+
+1. pip install django-cleanup
+2.  in settings.py
+ INSTALLED_APPS = (
+    ...
+    'django_cleanup', # should go after your apps
+
+)
+
+

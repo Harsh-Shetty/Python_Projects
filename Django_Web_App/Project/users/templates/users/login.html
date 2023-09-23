@@ -1,0 +1,39 @@
+<!--takes extends "blog/base.html for TITLE code"-->
+<!--TITLE is displayed in tab of browser-->
+<!--After sucessful login Django looks for new page in account/profile which doesn't exist in this project-->
+<!--This default path (account/profile) is changed in Project/settings.py (in the last part of the file)-->
+<!--with LOGIN_REDIRECT_URL = 'blog-home' which is the name/url_pattern of Home page -->
+<head>
+    <title>Login</title>
+</head>
+{% extends "blog/base.html" %}
+<!--Loding crispy bootstrap pack to beautify the page-->
+<!--Refer Cmd_codes file in C:\Users\DELL\Desktop\Python codes\Django_Web_App
+for more info of download & installtion of this package-->
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="content-section">
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Log in</legend>
+                {{ form|crispy }}
+                <!--'|' represents filter. filter crispy is applied to the form. Crispy gives us built
+                    in fields. -->
+            </fieldset>
+            <div class="form-group">
+                <!--Login & password reset buttons-->
+                <button class="btn btn-outline-info" type="submit">Login</button>
+                <small class="text-muted ml-2">
+                    <a href="{% url 'password_reset' %}">Forgot Password?</a>
+                </small>
+            </div>
+        </form>
+        <div class="border-top pt-3">
+            <small class="text-muted">
+                <!--Takes to Sign Up page (users/register.html)if acc already exists-->
+                Need an Account? <a class="ml-2" href="{% url 'register'%}">Sign Up</a>
+            </small>
+        </div>
+    </div>
+{% endblock content %}

@@ -1,0 +1,35 @@
+<!--Check blog/base.html in Templates dir for the fromat-->
+
+{% extends "blog/base.html" %}
+<!--posts is the key of context. Refer def home in blog/views.py-->
+{% load embed_video_tags %}
+{% block content %}
+    <article class="media content-section">
+        <!--img class adds user's profile pic beside the blog-->
+        <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
+        <div class="media-body">
+        <div class="article-metadata">
+            <!--href from blog/user_posts.html.
+                object.author.username instead of post.author.username {{ object.content }}-->
+            <a class="mr-2" href="{% url 'user-posts' object.author.username %}">{{ object.author }}</a>
+            <small class="text-muted">{{ object.date_posted|date:"F d, Y" }}</small>
+            <!--Documentation for date format (|date:"F d, Y"): https://docs.djangoproject.com/en/2.0/ref/templates/builtins/#date
+                Create update & button. If user is author of published Post take them to resp pages when resp buttons are pressed-->
+            {% if object.author == user %}
+                <div>
+                    <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'post-update' object.id %}">Update</a>
+                    <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'post-delete' object.id %}">Delete</a>
+                </div>
+            {% endif%}
+        <br><!--adds space-->    
+        </div>
+        <h2 class="article-title">{{ object.title }}</h2>
+        <!--urlize makes urls clickable-->
+        <p class="article-content">{{ object.content|urlize }}</p>
+        <br>
+        {% if object.video %}
+        {% video object.video '560x360' %}
+        {% endif %}
+        </div>
+    </article>
+{% endblock content %}
